@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView todosNumSorteados;
     private Button btnSortearBola;
+    private ImageButton btnRefresh;
 
     private Random geradorRandomico;
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GridView gridView;
     GridAdapter adapter;
 
+    private final int balls = 75;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         todosNumSorteados = findViewById(R.id.todosNumerosSorteados_TextView);
         btnSortearBola = findViewById(R.id.btn_sortearBola);
+        btnRefresh = findViewById(R.id.btn_Refresh);
 
         //colocar um listener no botao para o evento click
         btnSortearBola.setOnClickListener(this);
+        btnRefresh.setOnClickListener(this);
 
         geradorRandomico = new Random(System.currentTimeMillis());
 
@@ -81,9 +87,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //instancia todos os números do Bingo
     public void init(){
 
-        for(int i=1 ; i<=75 ; i++){
+        for(int i=1 ; i<=balls ; i++){
             numeros.add(i);
         }
+
+    }
+
+    private void reiniciarBingo() {
+
+        //numerosSorteados.removeAll(numerosSorteados);
+        numerosSorteados.clear();
+        numeros.clear();
+        init();
+        exibeNumerosSorteados();
 
     }
 
@@ -134,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void exibeNumerosSorteados(){
+
         todosNumSorteados.setText(numerosSorteados.toString()); //exibe os numeros sorteados
 
         adapter.notifyDataSetChanged();
@@ -150,8 +167,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_sortearBola:
                 sortearNumero();
                 break;
+            case  R.id.btn_Refresh:
+                reiniciarBingo();
+                break;
 
         }
 
     }
+
+
 }
