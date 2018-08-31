@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final String NUMEROS_FULL_TAG = "NUMEROS_FULL_TAG";
     private final String NUMEROS_SORTEADOS_TAG = "NUMEROS_SORTEADOS_TAG";
 
-    private TextView todosNumSorteados;
+    //private TextView todosNumSorteados;
     private Button btnSortearBola;
     private ImageButton btnRefresh;
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        todosNumSorteados = findViewById(R.id.todosNumerosSorteados_TextView);
+        //todosNumSorteados = findViewById(R.id.todosNumerosSorteados_TextView);
         btnSortearBola = findViewById(R.id.btn_sortearBola);
         btnRefresh = findViewById(R.id.btn_Refresh);
 
@@ -53,9 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gridView = (GridView) findViewById(R.id.customLayoutBingo);
 
         init();
-
-        adapter = new GridAdapter(MainActivity.this, numerosSorteados);
-        gridView.setAdapter(adapter);
     }
 
     @Override
@@ -151,7 +148,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void exibeNumerosSorteados(){
 
-        todosNumSorteados.setText(numerosSorteados.toString()); //exibe os numeros sorteados
+        //todosNumSorteados.setText(numerosSorteados.toString()); //exibe os numeros sorteados
+
+        if (adapter == null){
+            adapter = new GridAdapter(MainActivity.this, numerosSorteados);
+            gridView.setAdapter(adapter);
+        }
 
         adapter.notifyDataSetChanged();
         gridView.invalidateViews();
