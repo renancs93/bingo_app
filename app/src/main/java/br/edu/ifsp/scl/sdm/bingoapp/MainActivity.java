@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             numeros.add(i);
         }
 
+        //Collections.shuffle(numeros);
+
     }
 
     private void reiniciarBingo() {
@@ -156,8 +158,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         adapter.notifyDataSetChanged();
-        gridView.invalidateViews();
-        gridView.setAdapter(adapter);
+        gridView.smoothScrollToPosition(gridView.getColumnWidth());
+
+        //gridView.invalidateViews();
+        //gridView.setAdapter(adapter);
 
     }
 
