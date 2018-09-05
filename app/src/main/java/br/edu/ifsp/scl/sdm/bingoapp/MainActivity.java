@@ -1,14 +1,18 @@
 package br.edu.ifsp.scl.sdm.bingoapp;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,8 +20,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, CustomDialogSettings.CustomDialogListener {
 
+    private final String NUMEROS_BALLS_TAG = "NUMEROS_BALLS_TAG";
     private final String NUMEROS_FULL_TAG = "NUMEROS_FULL_TAG";
     private final String NUMEROS_SORTEADOS_TAG = "NUMEROS_SORTEADOS_TAG";
 
@@ -33,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GridView gridView;
     GridAdapter adapter;
 
-    private final int balls = 75;
+    //valor total de pedras de um Bingo padrão
+    private int balls = 75;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState);
 
         //salvar dados de estado dinâmicos
+        outState.putInt(NUMEROS_BALLS_TAG, balls);
         outState.putIntegerArrayList(NUMEROS_FULL_TAG, numeros);
         outState.putIntegerArrayList(NUMEROS_SORTEADOS_TAG, numerosSorteados);
 
@@ -72,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //resgatar o estado armazenado
         if (savedInstanceState != null){
 
+            balls = savedInstanceState.getInt(NUMEROS_BALLS_TAG);
             numeros = savedInstanceState.getIntegerArrayList(NUMEROS_FULL_TAG);
             numerosSorteados = savedInstanceState.getIntegerArrayList(NUMEROS_SORTEADOS_TAG);
 
@@ -99,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         numeros.clear();
         init();
         exibeNumerosSorteados();
-
     }
 
     public void sortearNumero(){
@@ -181,5 +188,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.menu_config:
+                showDialogSettings();
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showDialogSettings() {
+        DialogFragment dialogFragment = new CustomDialogSettings(balls);
+        dialogFragment.show(getSupportFragmentManager(), "CustomDialogSettings");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int valor) {
+        balls = valor;
+        Toast.makeText(MainActivity.this ,"Número de Pedras atualizado: " + valor, Toast.LENGTH_SHORT).show();
+
+        reiniciarBingo();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog, int valor) {
+        balls = valor;
+        Toast.makeText(MainActivity.this ,"Total de Pedras: "+ valor, Toast.LENGTH_SHORT).show();
+
+        reiniciarBingo();
+    }
 }

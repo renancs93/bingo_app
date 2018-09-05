@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group
+        android:visible="true"
+        android:id="@+id/main_menu_group"
+        >
+        <item
+            android:id="@+id/menu_config"
+            android:title="@string/txt_config"
+            android:icon="@drawable/ic_settings_black"
+            app:showAsAction="always"
+            />
+
+
+    </group>
+
+</menu>
